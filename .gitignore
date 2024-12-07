@@ -1,3 +1,8 @@
+<<<<<<< HEAD
 *.o
 *.bin
 *.out
+=======
+*.bin
+*.img
+>>>>>>> b862f57 (add stuff)
