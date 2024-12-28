@@ -1,4 +1,4 @@
-; the frog project - Stage 2 bootloader
+; uzbootsc - Stage 2 bootloader
 ; This is free and unencumbered software released into the public domain.
 
 org 0x8000

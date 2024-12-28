@@ -1,4 +1,4 @@
-; the frog project - Stage 1 bootloader
+; uzbootsc - Stage 1 bootloader
 ; This is free and unencumbered software released into the public domain.
 
 %macro println 1
@@ -23,6 +23,7 @@ start:
 	println msg_loading
 
 stage2_loader:
+	; load next sectors at 0x8000
 	mov ah, 0x02
 	mov al, 0x01
 	mov ch, 0x00
@@ -41,7 +42,7 @@ stage2_error:
 
 %include "vga.s"
 
-msg_welcome	db	'the frog project - 0.0.001', 0
+msg_welcome	db	'uzbootsc', 0
 msg_loading	db	'loading stage2...', 0
 msg_error	db 	'error while loading stage2. halting system!', 0
 

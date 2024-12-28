@@ -1,4 +1,4 @@
-; the frog project - VGA driver routines
+; uzbootsc - VGA driver routines
 ; This is free and unencumbered software released into the public domain.
 
 ; IN:  None
