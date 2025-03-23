@@ -129,6 +129,46 @@ str_cmp:
 	stc
 	ret
 
+; ***********
+; *** vga ***
+; ***********
+
+vga_clear:
+	mov ah, 0
+	mov al, 2
+	int 0x10
+	ret
+
+; IN:  <si> : pointer to null-terminated string
+vga_print:
+	.loop:
+		lodsb
+		or al, al
+		jz .done
+		mov ah, 0x0E
+		int 0x10
+		jmp .loop
+	.done:
+		ret
+
+; IN:  <si> : pointer to null-terminated string
+vga_println:
+	.loop:
+		lodsb
+		or al, al
+		jz .done
+		mov ah, 0x0E
+		int 0x10
+		jmp .loop
+	.done:
+		mov al, 0xA
+		mov ah, 0x0E
+		int 0x10
+		mov al, 0xD
+		mov ah, 0x0E
+		int 0x10
+		ret
+
 ; ****************
 ; *** messages ***
 ; ****************
@@ -141,5 +181,3 @@ msg_badcmd	db	"Unknown command, rtfm", 0
 cmd_help	db	"help", 0
 
 buffer		times 64 db 0
-
-%include "vga.s"
