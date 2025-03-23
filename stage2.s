@@ -1,6 +1,7 @@
 ; uzbootsc - Stage 2 bootloader
 ; This is free and unencumbered software released into the public domain.
 
+; loaded at this addr by stage1
 org 0x8000
 bits 16
 
@@ -72,6 +73,7 @@ str_get:
 	cmp cl, 0
 	je .loop
 
+	; decrement counters + print blank char
 	dec di
 	mov byte [di], 0
 	dec cl
@@ -92,6 +94,7 @@ str_get:
 	mov al, 0
 	stosb
 
+	; newline
 	mov ah, 0x0E
 	mov al, 0x0D
 	int 0x10
@@ -105,6 +108,7 @@ str_get:
 str_cmp:
 
 .loop:
+	; grab byte from both and compare until zero
 	mov al, [si]
 	mov bl, [di]
 	cmp al, bl
