@@ -1,10 +1,7 @@
 ; uzbootsc - Stage 2 bootloader
 ; This is free and unencumbered software released into the public domain.
 
-; todo: macros (to make code smaller) for regular calls
 ; todo: improve calls w/ stack
-; todo: declare macros for ENDL 
-
 
 ; **************
 ; *** macros ***
@@ -12,14 +9,24 @@
 
 %define ENDL 0xA, 0xD
 
+%macro strcmp 2	
+	mov si, %1
+	mov di, %2
+	call str_cmp
+%endmacro
+
+%macro println 1
+	mov si, %1
+	call vga_println
+%endmacro	
+
 ; loaded at this addr by stage1
 org 0x8000
 bits 16
 
 ; greetings
 call vga_clear
-mov si, msg_itworks
-call vga_println
+println msg_itworks
 
 ; everything gets back here
 shell_loop:
@@ -35,25 +42,18 @@ shell_loop:
 	je shell_loop
 
 	; command: help
-	mov si, buffer
-	mov di, cmd_help
-	call str_cmp
+	strcmp buffer, cmd_help
 	jc .help
 
 	; command: reboot
-	mov si, buffer
-	mov di, cmd_reboot
-	call str_cmp
+	strcmp buffer, cmd_reboot
 	jc .reboot
 
 	; command: what
-	mov si, buffer
-	mov di, cmd_what
-	call str_cmp
+	strcmp buffer, cmd_what
 	jc .what
 	
-	mov si, msg_badcmd
-	call vga_println
+	println msg_badcmd	
 	jmp shell_loop
 
 ; ****************
@@ -61,20 +61,17 @@ shell_loop:
 ; ****************
 
 .help:
-	mov si, msg_help
-	call vga_println
+	println msg_help	
 	jmp shell_loop
 
 .reboot:
 	int 19h
 	; we shouldnt reach this
-	mov si, err_reboot
-	call vga_println
+	println err_reboot
 	jmp shell_loop
 
 .what:
-	mov si, msg_what
-	call vga_println	
+	println msg_what
 	jmp shell_loop
 		
 
